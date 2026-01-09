@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Phani Pavan K <kphanipavan@gmail.com>
+ * Copyright 2026 Phani Pavan K <kphanipavan@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -79,17 +79,19 @@ PlasmoidItem { // Main component of the plasmoid
         executable.exec(["pkexec", "chmod", "444", root.raplPath].join(" "));
     }
 
+    // function addPermFixCron() {
+    //     // Adds the chmod permission fix command to crontab to run at reboot.
+    //     executable.exec(["grep", root.raplPath, "||", "echo", "@reboot", "chmod", "444", root.raplPath, ">>", "/etc/crontab"].join(" "));
+    // }
+
     function update() {
         // Code to recalculate new power draw and update the UI
         executable.exec('cat ' + root.raplPath);
-        console.log(root.newNRG);
-        print(root.newNRG);
         if (root.newNRG == '') {
             root.power = 'FX-PR';
         } else {
             var time = (new Date).getTime();
             var timeDelta = (time - root.oldTime) / 1000;
-            console.log(timeDelta);
             var joules = parseInt(root.newNRG) / 1e+06;
             root.power = Math.round((joules - root.oldNRG) * 10 / (timeDelta)) / 10;
             root.oldNRG = joules;
