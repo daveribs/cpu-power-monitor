@@ -71,6 +71,11 @@ PlasmoidItem { // Main component of the plasmoid
             text: i18n("Fix Sensor Permission")
             icon.name: "view-refresh"
             onTriggered: fixPermission()
+        },
+        PlasmaCore.Action {
+            text: i18n("Permanently Fix Permission")
+            icon.name: "list-add"
+            onTriggered: addPermFixCron()
         }
     ]
 
@@ -79,10 +84,14 @@ PlasmoidItem { // Main component of the plasmoid
         executable.exec(["pkexec", "chmod", "444", root.raplPath].join(" "));
     }
 
-    // function addPermFixCron() {
-    //     // Adds the chmod permission fix command to crontab to run at reboot.
-    //     executable.exec(["grep", root.raplPath, "||", "echo", "@reboot", "chmod", "444", root.raplPath, ">>", "/etc/crontab"].join(" "));
-    // }
+    function addPermFixCron() {
+        // Adds the chmod permission fix command to crontab to run at reboot.
+        executable.exec(["grep", root.raplPath, "/etc/crontab", "||", "echo", "@reboot", "chmod", "444", root.raplPath, "|", "pkexec", "tee", "/etc/crontab"].join(" "));
+    }
+
+    function checkCron() {
+        executable.exec([].join(" "));
+    }
 
     function update() {
         // Code to recalculate new power draw and update the UI
