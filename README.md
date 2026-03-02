@@ -34,8 +34,10 @@ Drag and drop the widget from the `Add or Manage Widgets` either to the desktop 
 
 ### Note
 1. The widget displays power consumption in Watts.
-2. This widget makes use of the `/sys/class/powercap/intel-rapl:0/energy_uj` sysfs interface to query energy consumption. If the widget displays "FX-PR", then 
+2. This widget uses `/sys/class/powercap/intel-rapl:0/energy_uj` sysfs interface to query energy consumption by default. If the widget displays "FX-PR", then 
     * your processor doesn't support this interface, or
     * don't have the permission to read the said file.
 3. If later is the case, right click the widget and select `Fix Sensor Permission`. Enter the superuser password when prompted. (Temporary, resets on reboot)
+4. Or you can change the RAPL interface path from the configuration.
+
     ![Fix permission](images/fixPermission.png)
