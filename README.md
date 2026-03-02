@@ -30,6 +30,7 @@ Drag and drop the widget from the `Add or Manage Widgets` either to the desktop 
 
 1. Update Interval: Changes the rate at which the widget updates.
 2. Bold Text: Changes display text to <b>Bold</b>
+3. Choose RaplPath. You can find them in /sys/class/powercap/. Look for energy_uj.
 
 ### Note
 1. The widget displays power consumption in Watts.
