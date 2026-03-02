@@ -17,5 +17,9 @@
       <whatsthis>Use bold text</whatsthis>
       <default>false</default>
     </entry>
+    <entry name="raplPath" type="String">
+      <label>RAPL path</label>
+      <default>/sys/class/powercap/intel-rapl:0/energy_uj</default>
+    </entry>
   </group>
 </kcfg>
