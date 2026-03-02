@@ -94,24 +94,25 @@ PlasmoidItem { // Main component of the plasmoid
     }
 
 
+
     function update() {
-        // Code to recalculate new power draw and update the UI
         executable.exec('cat ' + root.raplPath);
+
         if (root.newNRG == '') {
             root.power = 'FX-PR';
         } else {
             var time = (new Date).getTime();
             var timeDelta = (time - root.oldTime) / 1000;
             var joules = parseInt(root.newNRG) / 1e+06;
-            root.power = Math.round((joules - root.oldNRG) * 10 / (timeDelta)) / 10;
+
+            // Whole-number power draw
+            root.power = Math.round((joules - root.oldNRG) / timeDelta) + ' W';
+
             root.oldNRG = joules;
             root.oldTime = time;
-            if (Number.isInteger(root.power))
-                root.power = root.power + '.0 W';
-            else
-                root.power = root.power + ' W';
         }
     }
+
 
     Timer {
         // Repeating trigger which calls the update function
