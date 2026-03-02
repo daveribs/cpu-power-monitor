@@ -23,14 +23,17 @@ import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 
+
 PlasmoidItem { // Main component of the plasmoid
+
     id: root // Reference name of the main component
     preferredRepresentation: fullRepresentation
     property var power: "FX-PR" // Variable used for holding the text to display in the widget
     property double oldNRG: 0 // State variable, to hold old energy value
     property double newNRG: 0 // State variable, used for storing new energy value
     property double oldTime: 0 // State variable, to store old time
-    property string raplPath: plasmoid.configuration.raplPath || "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/energy_uj" // Path to file which stores the energy information
+    property string raplPath: plasmoid.configuration.raplPath
+
 
     // The main UI component, shows simple text
     fullRepresentation: PlasmaComponents.Label {
@@ -75,7 +78,7 @@ PlasmoidItem { // Main component of the plasmoid
         PlasmaCore.Action {
             text: i18n("Permanently Fix Permission")
             icon.name: "list-add"
-            onTriggered: addPermFixUdev()
+            onTriggered: addPermTmpDFix()
         }
     ]
 
@@ -84,21 +87,10 @@ PlasmoidItem { // Main component of the plasmoid
         executable.exec(["pkexec", "chmod", "444", root.raplPath].join(" "));
     }
 
-    function addPermFixUdev() {
-        // Create udev rule that makes RAPL readable
-        var rule = 'SUBSYSTEM=="powercap", MODE="0444"';
+    function addPermTmpDFix() {
+        // Write rule file with root privileges
+        executable.exec(['pkexec', 'sh', '-c', '"echo f', root.raplPath, '0444 root root - > /etc/tmpfiles.d/99-rapl.conf"'].join(" "));
 
-        // Write rule file as root
-        executable.exec([
-            "sh", "-c",
-            "echo '" + rule + "' | pkexec tee /etc/udev/rules.d/99-rapl.rules"
-        ].join(" "));
-
-        // Reload udev rules
-        executable.exec("pkexec udevadm control --reload");
-
-        // Apply rules immediately
-        executable.exec("pkexec udevadm trigger");
     }
 
 
